@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Задние 4</title>
+    <title>Задние 5</title>
     <style>
         .error {
             border: 2px solid red;
@@ -10,26 +10,36 @@
     </style>
 </head>
 <body>
-    <h1>Задание 4</h1>
+    <h1>Задание 5</h1>
     <div class="main">
-        <?php
-        if ($errorOutput) {
-            print('<section id="messages">');
-            if ($hasErrors)
-                print('<h2>Ошибка</h2>');
-            else
-                print('<h2>Сообщения</h2>');
-            print($errorOutput);
-//            print('</section>');
+    <?php
+        if (!empty($messages)) {
+        print('<div id="messages">');
+            // Выводим все сообщения.
+            foreach ($messages as $message) {
+            print($message);
+            }
+            print('</div>');
         }
+        // Далее выводим форму отмечая элементы с ошибками классом error
+        // и задавая начальные значения элементов ранее сохраненными.
         ?>
         <br />
-    <form method="POST" id="form">
+
+        <div id="user_form">
+            <?php
+            if (!empty($_COOKIE[session_name()]) && !empty($_SESSION['login']))
+                print('<h3 id="form"> FORM<br/>(режим редактирования) </h3>');
+            else
+                print('<h3 id="form"> FORM </h3>');
+            ?>
+        <form method="POST">
         <label>
             Введите Ваше имя:<br />
             <input name="name"
                 <?php if (!empty($errors['name'])) {print 'class="error"';} ?>
                    value="<?php print $values['name']; ?>"
+                   required
             />
         </label><br />
         <label>
@@ -38,6 +48,7 @@
             <?php if (!empty($errors['email'])) {print 'class="error"';} ?>
             value="<?php print $values['email']; ?>"
             type="email"
+                   required
             />
         </label><br />
 
@@ -47,6 +58,7 @@
                 <?php if (!empty($errors['date'])) {print 'class="error"';} ?>
                    value="<?php print $values['date']; ?>"
                    type="date"
+                   required
             />
         </label><br />
         Укажите Ваш пол:<br />
@@ -100,7 +112,7 @@
         </label><br />
         <label>
             Напишите Вашу биографию:<br />
-            <textarea name="bio"><?php print $values['bio']; ?></textarea>
+            <textarea name="bio">.....</textarea>
         </label><br />
         С контрактом ознакомлен(а):<br />
         <label <?php if (array_key_exists('check', $errors)) {print 'class="error"';} ?>>
@@ -110,10 +122,19 @@
         </label><br />
         <input type="submit" value="Отправить" />
     </form>
-
-    <p>1) Создание таблиц MySQL</p>
-    <img src="images/SQL.png" alt="1.0">
-    <hr>
+        </div>
+        <nav id="navi">
+            <ul>
+                <li>
+                    <?php
+                    if (!empty($_COOKIE[session_name()]) && !empty($_SESSION['login']))
+                        print('<a href="./?quit=1" title = "Log out">Выйти</a>');
+                    else
+                        print('<a href="login.php" title = "Log in">Войти</a>');
+                    ?>
+                </li>
+            </ul>
+        </nav>
 
 </body>
 </html>
